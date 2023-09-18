@@ -1,0 +1,25 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch: {}
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Build the Docker image adn push to ghcr.io
+      run: |
+        docker login --username seboknt --password ${{ secrets.docker_token }}
+        docker build . --file Dockerfile --tag seboknt/nginx:latest
+        docker push seboknt/nginx:latest
